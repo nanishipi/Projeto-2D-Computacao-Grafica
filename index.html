@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeto 1 - Jogo</title>
+</head>
+<body>
+    
+    <canvas id="myCanvas" style="width: 100%;">
+		Your browser does not support HTML5 Canvas.
+	</canvas>
+
+
+    <script>
+        const canvas = document.querySelector("#myCanvas");
+        canvas.width = innerWidth;
+        canvas.height = innerHeight;
+        const ctx = canvas.getContext("2d");
+        let backgroundImage = new Image()
+        backgroundImage.src = 'images/backgroundImage.png'
+        const W = canvas.width
+        const H = canvas.height
+
+        //Criação da personagem
+        let personagem = new Image();
+        personagem.src = "images/SpriteTestImage.png"
+        let moveRight = false
+        let moveLeft = false;
+        let characterCounter1 = 0;
+        //Controlador de comandos de movimento
+        function arrowPressed(e){
+            if(e.key == "ArrowRight"){
+                moveRight = true;
+                console.log("clicou")
+            }
+            if(e.key == "ArrowLeft"){
+                moveLeft = true;
+                console.log("clicou")
+            }
+        }
+
+        function arrowReleased(e){
+            if(e.key == "ArrowRight"){
+                console.log("Largou")
+                moveRight = false;
+            }
+            if (e.key == "ArrowLeft"){
+                console.log("Largou");
+                moveLeft = false;
+            }
+        }
+
+        //Controladores de listners
+        window.addEventListener("keydown", arrowPressed)
+        window.addEventListener("keyup", arrowReleased)
+
+
+        backgroundImage.onload = function(){
+            personagem.onload = function(){
+                render();
+            }
+        }
+
+        function render(){
+            console.log("Funcao")
+            ctx.clearRect(0,0,W,H)
+            ctx.drawImage(backgroundImage,0,0,W,H)
+           //Controlador de personagem
+            
+           if(moveRight){
+               console.log("entrou")
+               characterCounter1++;
+                            
+            }
+            if(moveLeft){
+                console.log("entrou")
+                characterCounter1--;
+            }
+
+            console.log(moveRight)
+            ctx.drawImage(personagem,characterCounter1 * 3 + W / 2 - 100, H / 2 + 150,100,100)
+            ctx.fillRect(0,0,W / 50, H );
+            ctx.fillRect(W - W/ 50,0,W / 50, H );
+            ctx.fillRect(0,0,W, H / 30 );
+            ctx.fillRect(0,H - H / 30,W, H / 30 );
+            window.requestAnimationFrame(render)
+        }
+
+    </script>
+</body>
+</html>

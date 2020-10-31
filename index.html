@@ -22,6 +22,64 @@
         const W = canvas.width
         const H = canvas.height
 
+        class Ball{
+            constructor(x,y,r,c,v){
+                this.xBall = x; //x posição inicial
+                this.yBall = y; //y posição inicial
+                this.rBall = r; //raio da bola
+                this.cBall = c; //cor da bola 
+                this.vBall = v; //velocidade
+            }
+
+            draw(){
+                ctx.fillStyle = this.c;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+                ctx.fill;
+            }
+
+            update(){
+
+            }
+        }
+
+        class Player{
+            constructor(x,y,v){
+                this.xPlayer = x; //x posição inicial
+                this.yPlayer = y; //y posição inicial
+                this.vPlayer = v; //velocidade de andamento
+            }
+
+            draw(){
+
+            }
+
+            update(){
+
+            }
+        }
+
+        class Harpoon{
+            constructor(){
+                this.xHarpoon = x; //x posição inicial
+                this.yHarpoon = y; //y posição inicial
+                this.vHarpoon = v; //velociade do arpão
+            }
+
+            draw(){
+
+            }
+
+            update(){
+                
+            }
+        }
+
+        let ball = new Array();
+
+        function newBall(){
+
+        }
         //Criação da personagem
         let personagem = new Image();
         personagem.src = "images/SpriteTestImage.png"

@@ -27,7 +27,10 @@
         spriteTestImage.src = 'images/characterRunning.png'
         let spriteStop = new Image()
         spriteStop.src="images/characterStop.png"
+        let spriteTestImage2 = new Image()
+        spriteTestImage2.src = '../images/characterRunning2.png'
         let spriteMovesX = 0
+
         class Ball{
             constructor(x,y,r,c,v){
                 this.xBall = x; //x posição inicial
@@ -86,9 +89,10 @@
         function newBall(){
 
         }
+
         //Criação da personagem
         let personagem = new Image();
-        personagem.src = "images/SpriteTestImage.png"
+            personagem.src = "images/SpriteTestImage.png"
         let moveRight = false
         let moveLeft = false;
         let characterCounter1 = 0;
@@ -145,6 +149,21 @@
                     ctx.drawImage(spriteStop, spriteStopFrames * 501, 0, 501, 526, spriteMovesX * 40 + W / 2 - 100, H / 2 + 150, 108, 108)
                     console.log("ELESE")
                 }
+
+                if (moveLeft){
+                    spriteFramecounter++
+                    spriteMovesX--;
+                        if(spriteFramecounter == 8){
+                            spriteFramecounter = 0
+                        }
+                }else{
+                    spriteStopFrames++
+                    if(spriteStopFrames == 8){
+                        spriteStopFrames = 0
+                    }
+                    ctx.drawImage(spriteStop, spriteStopFrames * 501, 0, 501, 526, spriteMovesX * 40 + W / 2 - 100, H / 2 + 150, 108, 108)
+                }
+
             }
 
         //Fim teste sprite move
@@ -165,11 +184,9 @@
             }
            //Controlador de personagem
            
-         
-           
-            if(moveLeft){
+            if(!moveLeft){
                 //console.log("entrou")
-                characterCounter1--;
+
             }
 
             //console.log(moveRight)

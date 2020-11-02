@@ -21,7 +21,13 @@
         backgroundImage.src = 'images/backgroundImage.png'
         const W = canvas.width
         const H = canvas.height
-
+        let spriteFramecounter = 0
+        let spriteStopFrames = 0
+        let spriteTestImage = new Image()
+        spriteTestImage.src = 'images/characterRunning.png'
+        let spriteStop = new Image()
+        spriteStop.src="images/characterStop.png"
+        let spriteMovesX = 0
         class Ball{
             constructor(x,y,r,c,v){
                 this.xBall = x; //x posição inicial
@@ -90,21 +96,21 @@
         function arrowPressed(e){
             if(e.key == "ArrowRight"){
                 moveRight = true;
-                console.log("clicou")
+                //console.log("clicou")
             }
             if(e.key == "ArrowLeft"){
                 moveLeft = true;
-                console.log("clicou")
+                //console.log("clicou")
             }
         }
 
         function arrowReleased(e){
             if(e.key == "ArrowRight"){
-                console.log("Largou")
+                //console.log("Largou")
                 moveRight = false;
             }
             if (e.key == "ArrowLeft"){
-                console.log("Largou");
+                //console.log("Largou");
                 moveLeft = false;
             }
         }
@@ -115,36 +121,65 @@
 
 
         backgroundImage.onload = function(){
-            personagem.onload = function(){
+          
                 render();
-            }
+                window.setInterval(moveTest, 1000/10)
+
+           
         }
+        
+        //Teste sprite move
+            function moveTest(){
+                if(moveRight){
+                spriteFramecounter++
+                spriteMovesX++;
+                    if(spriteFramecounter == 8){
+                        spriteFramecounter = 0
+                        
+                    }         
+                }else{
+                    spriteStopFrames++
+                    if(spriteStopFrames == 8){
+                        spriteStopFrames = 0
+                    }
+                    ctx.drawImage(spriteStop, spriteStopFrames * 501, 0, 501, 526, spriteMovesX * 40 + W / 2 - 100, H / 2 + 150, 108, 108)
+                    console.log("ELESE")
+                }
+            }
+
+        //Fim teste sprite move
+
+        //ctx.drawImage(spriteStop, spriteStopFrames * 501, 0, 501, 526, spriteMovesX * 20 + W / 2 - 100, H / 2 + 150, 108, 108)
+         
 
         function render(){
-            console.log("Funcao")
+            //console.log("Funcao")
             ctx.clearRect(0,0,W,H)
             ctx.drawImage(backgroundImage,0,0,W,H)
-           //Controlador de personagem
             
-           if(moveRight){
-               console.log("entrou")
-               characterCounter1++;
-                            
+            if(!moveRight){
+                ctx.drawImage(spriteStop, spriteStopFrames * 501, 0, 501, 526, spriteMovesX * 40 + W / 2 - 100, H / 2 + 150, 108, 108)
+
+            }else{
+                ctx.drawImage(spriteTestImage, spriteFramecounter * 500, 0, 517, 517, spriteMovesX * 40 + W / 2 - 100, H / 2 + 150, 100, 100)
             }
+           //Controlador de personagem
+           
+         
+           
             if(moveLeft){
-                console.log("entrou")
+                //console.log("entrou")
                 characterCounter1--;
             }
 
-            console.log(moveRight)
-            ctx.drawImage(personagem,characterCounter1 * 3 + W / 2 - 100, H / 2 + 150,100,100)
+            //console.log(moveRight)
+            //ctx.drawImage(personagem,characterCounter1 * 3 + W / 2 - 100, H / 2 + 150,100,100)
             ctx.fillRect(0,0,W / 50, H );
             ctx.fillRect(W - W/ 50,0,W / 50, H );
             ctx.fillRect(0,0,W, H / 30 );
             ctx.fillRect(0,H - H / 30,W, H / 30 );
             window.requestAnimationFrame(render)
         }
-
     </script>
 </body>
 </html>

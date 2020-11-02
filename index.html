@@ -11,6 +11,7 @@
 		Your browser does not support HTML5 Canvas.
 	</canvas>
 
+    
 
     <script>
         const canvas = document.querySelector("#myCanvas");
@@ -28,7 +29,7 @@
         let spriteStop = new Image()
         spriteStop.src="images/characterStop.png"
         let spriteTestImage2 = new Image()
-        spriteTestImage2.src = '../images/characterRunning2.png'
+        spriteTestImage2.src = 'images/characterRunning 2.png'
         let spriteMovesX = 0
 
         class Ball{
@@ -125,11 +126,8 @@
 
 
         backgroundImage.onload = function(){
-          
                 render();
                 window.setInterval(moveTest, 1000/10)
-
-           
         }
         
         //Teste sprite move
@@ -141,14 +139,15 @@
                         spriteFramecounter = 0
                         
                     }         
-                }else{
-                    spriteStopFrames++
-                    if(spriteStopFrames == 8){
-                        spriteStopFrames = 0
                     }
+                    else{
+                        spriteStopFrames++
+                        if(spriteStopFrames == 8){
+                            spriteStopFrames = 0
+                        }
                     ctx.drawImage(spriteStop, spriteStopFrames * 501, 0, 501, 526, spriteMovesX * 40 + W / 2 - 100, H / 2 + 150, 108, 108)
                     console.log("ELESE")
-                }
+                    }
 
                 if (moveLeft){
                     spriteFramecounter++
@@ -176,18 +175,16 @@
             ctx.clearRect(0,0,W,H)
             ctx.drawImage(backgroundImage,0,0,W,H)
             
-            if(!moveRight){
+            if(!moveRight && !moveLeft){
                 ctx.drawImage(spriteStop, spriteStopFrames * 501, 0, 501, 526, spriteMovesX * 40 + W / 2 - 100, H / 2 + 150, 108, 108)
 
-            }else{
+            }else if (moveRight){
                 ctx.drawImage(spriteTestImage, spriteFramecounter * 500, 0, 517, 517, spriteMovesX * 40 + W / 2 - 100, H / 2 + 150, 100, 100)
             }
-           //Controlador de personagem
-           
-            if(!moveLeft){
-                //console.log("entrou")
-
+            else{
+                ctx.drawImage(spriteTestImage2, spriteFramecounter * 500, 0, 517, 517, spriteMovesX * 40 + W / 2 - 100, H / 2 + 150, 100, 100)
             }
+           //Controlador de personagem
 
             //console.log(moveRight)
             //ctx.drawImage(personagem,characterCounter1 * 3 + W / 2 - 100, H / 2 + 150,100,100)

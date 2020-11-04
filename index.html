@@ -39,21 +39,30 @@
                 this.rBall = r; //raio da bola
                 this.cBall = c; //cor da bola 
                 this.vBall = v; //velocidade
+
             }
 
             draw(){
-                ctx.fillStyle = this.c;
+                ctx.fillStyle = this.cBall;
+
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
-                ctx.fill;
+                ctx.arc(this.xBall, this.yBall, this.rBall, 0, 2 * Math.PI);
+                ctx.fill();
+
+
             }
 
             update(){
 
+                if (this.yBall<=H/2 + 230 - this.rBall) {
+                    this.yBall+=this.vBall
+                }
+
             }
         }
 
-        class Player{
+
+        class Player1{
             constructor(x,y,v){
                 this.xPlayer = x; //x posição inicial
                 this.yPlayer = y; //y posição inicial
@@ -61,23 +70,52 @@
             }
 
             draw(){
-
+                ctx.drawImage(spriteStop, spriteStopFrames * 501, 0, 501, 526, spriteMovesX * 40 + W / 2 - 100, H / 2 + 150, 108, 108)
             }
 
             update(){
+                if(moveRight){
+                spriteFramecounter++
+                spriteMovesX++;
+                    if(spriteFramecounter == 8){
+                        spriteFramecounter = 0
+                        
+                    }         
+                    }
+                    else{
+                        spriteStopFrames++
+                        if(spriteStopFrames == 8){
+                            spriteStopFrames = 0
+                        }
+                    ctx.drawImage(spriteStop, spriteStopFrames * 501, 0, 501, 526, spriteMovesX * 40 + W / 2 - 100, H / 2 + 150, 108, 108)
+                    console.log("ELESE")
+                    }
 
+                if (moveLeft){
+                    spriteFramecounter++
+                    spriteMovesX--;
+                        if(spriteFramecounter == 8){
+                            spriteFramecounter = 0
+                        }
+                }else{
+                    spriteStopFrames++
+                    if(spriteStopFrames == 8){
+                        spriteStopFrames = 0
+                    }
+                    ctx.drawImage(spriteStop, spriteStopFrames * 501, 0, 501, 526, spriteMovesX * 40 + W / 2 - 100, H / 2 + 150, 108, 108)
+                }
             }
         }
 
         class Harpoon{
-            constructor(){
+            constructor(x, y, v){
                 this.xHarpoon = x; //x posição inicial
                 this.yHarpoon = y; //y posição inicial
                 this.vHarpoon = v; //velociade do arpão
             }
 
             draw(){
-
+                
             }
 
             update(){
@@ -85,9 +123,16 @@
             }
         }
 
+        let player1 = new Player1
+
         let ball = new Array();
 
         function newBall(){
+            ball.push(new Ball( Math.random() * W, 0, Math.random() * 40, 'rgba(0,0,0,0.9)', Math.random() * 4))
+
+        }
+        for (let i = 0; i < 4; i++) {
+            newBall()
 
         }
 
@@ -127,41 +172,12 @@
 
         backgroundImage.onload = function(){
                 render();
-                window.setInterval(moveTest, 1000/10)
+                window.setInterval(player1.update, 1000/10)
         }
         
         //Teste sprite move
             function moveTest(){
-                if(moveRight){
-                spriteFramecounter++
-                spriteMovesX++;
-                    if(spriteFramecounter == 8){
-                        spriteFramecounter = 0
-                        
-                    }         
-                    }
-                    else{
-                        spriteStopFrames++
-                        if(spriteStopFrames == 8){
-                            spriteStopFrames = 0
-                        }
-                    ctx.drawImage(spriteStop, spriteStopFrames * 501, 0, 501, 526, spriteMovesX * 40 + W / 2 - 100, H / 2 + 150, 108, 108)
-                    console.log("ELESE")
-                    }
-
-                if (moveLeft){
-                    spriteFramecounter++
-                    spriteMovesX--;
-                        if(spriteFramecounter == 8){
-                            spriteFramecounter = 0
-                        }
-                }else{
-                    spriteStopFrames++
-                    if(spriteStopFrames == 8){
-                        spriteStopFrames = 0
-                    }
-                    ctx.drawImage(spriteStop, spriteStopFrames * 501, 0, 501, 526, spriteMovesX * 40 + W / 2 - 100, H / 2 + 150, 108, 108)
-                }
+              
 
             }
 
@@ -176,7 +192,8 @@
             ctx.drawImage(backgroundImage,0,0,W,H)
             
             if(!moveRight && !moveLeft){
-                ctx.drawImage(spriteStop, spriteStopFrames * 501, 0, 501, 526, spriteMovesX * 40 + W / 2 - 100, H / 2 + 150, 108, 108)
+               
+                player1.draw()
 
             }else if (moveRight){
                 ctx.drawImage(spriteTestImage, spriteFramecounter * 500, 0, 517, 517, spriteMovesX * 40 + W / 2 - 100, H / 2 + 150, 100, 100)
@@ -192,6 +209,11 @@
             ctx.fillRect(W - W/ 50,0,W / 50, H );
             ctx.fillRect(0,0,W, H / 30 );
             ctx.fillRect(0,H - H / 30,W, H / 30 );
+            ball.forEach(ball => {
+                ball.draw()
+                ball.update()
+                console.log(ball)
+            });
             window.requestAnimationFrame(render)
         }
     </script>

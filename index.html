@@ -24,13 +24,21 @@
         const H = canvas.height
         let spriteFramecounter = 0
         let spriteStopFrames = 0
+        let spriteMovesX = 0
+
+        //Loading Images
         let spriteTestImage = new Image()
         spriteTestImage.src = 'images/characterRunning.png'
         let spriteStop = new Image()
         spriteStop.src="images/characterStop.png"
         let spriteTestImage2 = new Image()
         spriteTestImage2.src = 'images/characterRunning 2.png'
-        let spriteMovesX = 0
+        let borderH = new Image()
+        borderH.src = 'images/wave.png'
+        let borderV = new Image()
+        borderV.src = 'images/wave_vertical.png'
+        let brickBorder = new Image()
+        brickBorder.src = 'images/bricks.png'
 
         class Ball{
             constructor(x,y,r,c,v){
@@ -53,11 +61,9 @@
             }
 
             update(){
-
                 if (this.yBall<=H/2 + 230 - this.rBall) {
                     this.yBall+=this.vBall
                 }
-
             }
         }
 
@@ -205,12 +211,28 @@
 
             //console.log(moveRight)
             //ctx.drawImage(personagem,characterCounter1 * 3 + W / 2 - 100, H / 2 + 150,100,100)
+
+            //border
             ctx.fillRect(0,0,W / 50, H );
             ctx.fillRect(W - W/ 50,0,W / 50, H );
             ctx.fillRect(0,0,W, H / 30 );
             ctx.fillRect(0,H - H / 30,W, H / 30 );
+
+            //BrickBorder
+            ctx.drawImage(brickBorder, W / 50 ,0 ,W - W / 50, H / 30 )
+            ctx.drawImage(brickBorder, W / 50 ,H - H / 30, W - W / 50 , H / 30)
+            ctx.drawImage(brickBorder, 0 , 0, W / 50, H)
+            ctx.drawImage(brickBorder, W - W / 50 , 0, W / 50, H)
+
+            //Neon Border
+            //ctx.drawImage(borderV, 0 , 0, W / 50, H)
+            //ctx.drawImage(borderV, W - W / 50 , 0, W / 50, H)
+            //ctx.drawImage(borderH, 0 ,0 ,W , H / 30 )
+            //ctx.drawImage(borderH, 0 ,H - H / 30, W , H / 30)
+
+
             ball.forEach(ball => {
-                ball.draw()
+                ball.draw() 
                 ball.update()
                 console.log(ball)
             });

@@ -25,6 +25,7 @@
         let spriteFramecounter = 0
         let spriteStopFrames = 0
         let spriteMovesX = 0
+        let harpoonMovesX = spriteMovesX;
 
         //Loading Images
         let spriteTestImage = new Image()
@@ -120,14 +121,40 @@
                 this.vHarpoon = v; //velociade do arpão
             }
 
-            draw(){
-                
+            draw()
+            {   
+                //Triângulo do arpão
+                ctx.fillStyle = 'red'
+                ctx.beginPath();
+                ctx.moveTo(this.xHarpoon + 50, this.yHarpoon + 25)
+                ctx.lineTo(this.xHarpoon + 65, this.yHarpoon + 25)
+                ctx.lineTo(this.xHarpoon + 57, this.yHarpoon + 10)
+                ctx.fill();
+                ctx.closePath();
+                //Retângulos do arpão
+                ctx.beginPath();
+                ctx.fillStyle = 'grey'
+                ctx.fillRect(this.xHarpoon + 53, this.yHarpoon + 45, 10, 20)
+                ctx.fillStyle = 'red'
+                ctx.fillRect(this.xHarpoon + 55, this.yHarpoon + 35 , 5, 10)
+                ctx.fillStyle = 'black'
+                ctx.fillRect(this.xHarpoon + 55, this.yHarpoon + 25 , 5, 10)
+                ctx.stroke();
+                ctx.fill();
             }
 
             update(){
-                
+                if (moveRight) {
+                    harpoonMovesX++;
+                }
+
+                if (moveLeft){
+                    harpoonMovesX--;
+                }
             }
         }
+
+        let harpoon1 = new Harpoon(harpoonMovesX * 40 + W / 2 - 100, H / 2 + 150)
 
         let player1 = new Player1
 
@@ -158,6 +185,9 @@
                 moveLeft = true;
                 //console.log("clicou")
             }
+            if (e.key == ""){
+                
+            }
         }
 
         function arrowReleased(e){
@@ -184,7 +214,6 @@
         //Teste sprite move
             function moveTest(){
               
-
             }
 
         //Fim teste sprite move
@@ -201,7 +230,8 @@
                
                 player1.draw()
 
-            }else if (moveRight){
+            }
+            else if (moveRight){
                 ctx.drawImage(spriteTestImage, spriteFramecounter * 500, 0, 517, 517, spriteMovesX * 40 + W / 2 - 100, H / 2 + 150, 100, 100)
             }
             else{
@@ -209,6 +239,19 @@
             }
            //Controlador de personagem
 
+           //Controlar o arpão
+           if(!moveRight && !moveLeft){
+
+                harpoon1.draw(harpoonMovesX * 40 + W / 2 - 100, H / 2 + 150)
+
+           }
+           else if (moveRight){
+               harpoon1.draw(harpoonMovesX * 40 + W / 2 - 100, H / 2 + 150)
+           }
+           else{
+                harpoon1.draw(harpoonMovesX * 40 + W / 2 - 100, H / 2 + 150)
+           }
+            
             //console.log(moveRight)
             //ctx.drawImage(personagem,characterCounter1 * 3 + W / 2 - 100, H / 2 + 150,100,100)
 

@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projeto 1 - Jogo</title>
 </head>
-<body>
-    
-    <canvas id="myCanvas" style="width: 100%;">
-		Your browser does not support HTML5 Canvas.
-	</canvas>
 
-    
+<body>
+
+    <canvas id="myCanvas" style="width: 100%;">
+        Your browser does not support HTML5 Canvas.
+    </canvas>
+
+
 
     <script>
         const canvas = document.querySelector("#myCanvas");
@@ -24,34 +26,36 @@
         const H = canvas.height
         let spriteFramecounter = 0
         let spriteStopFrames = 0
-        let spriteMovesX = 0
-        let harpoonMovesX = spriteMovesX;
-
-        //Loading Images
         let spriteTestImage = new Image()
         spriteTestImage.src = 'images/characterRunning.png'
         let spriteStop = new Image()
-        spriteStop.src="images/characterStop.png"
+        spriteStop.src = "images/characterStop.png"
         let spriteTestImage2 = new Image()
         spriteTestImage2.src = 'images/characterRunning 2.png'
+        let spriteMovesX = 0
+        let spriteXValue = 0
+        let harpoonMovesX = spriteMovesX;
+        let brickBorder = new Image()
+        brickBorder.src = 'images/bricks.png'
         let borderH = new Image()
         borderH.src = 'images/wave.png'
         let borderV = new Image()
         borderV.src = 'images/wave_vertical.png'
-        let brickBorder = new Image()
-        brickBorder.src = 'images/bricks.png'
 
-        class Ball{
-            constructor(x,y,r,c,v){
+        class Ball {
+            constructor(x, y, r, c, v, d) {
                 this.xBall = x; //x posição inicial
                 this.yBall = y; //y posição inicial
                 this.rBall = r; //raio da bola
                 this.cBall = c; //cor da bola 
-                this.vBall = v; //velocidade
+                //this.vBall = v; //velocidade
+                this.dX = v * Math.cos(d)//direção X
+                this.dY = v * Math.sin(d)//direção Y
+                this.a = 0.7
 
             }
 
-            draw(){
+            draw() {
                 ctx.fillStyle = this.cBall;
 
                 ctx.beginPath();
@@ -61,71 +65,114 @@
 
             }
 
-            update(){
-                if (this.yBall<=H/2 + 230 - this.rBall) {
-                    this.yBall+=this.vBall
+            update() {
+
+                if (this.yBall >= H - H / 5.5 - this.rBall || this.yBall <= 0 + W / 50 + this.rBall - 10) {
+                    this.dY = -this.dY
+
+                    console.log('inverteu')
+                } else { this.dY += this.a }
+
+                if (this.xBall >= W - H / 30 - this.rBall) {
+                    this.dX = -this.dX
+
+                }
+                if (this.xBall <= 0 + H / 30 + this.rBall + 3) {
+                    this.dX = -this.dX
+
+                    console.log('inverteu')
+                }
+
+
+                this.yBall += this.dY
+                this.xBall += this.dX
+
+            }
+            contact() {
+                if (this.x) {
+
                 }
             }
         }
 
 
-        class Player1{
-            constructor(x,y,v){
+        class Player1 {
+            constructor(x, y, v) {
                 this.xPlayer = x; //x posição inicial
                 this.yPlayer = y; //y posição inicial
                 this.vPlayer = v; //velocidade de andamento
+                this.contadorFrames = 0
+                this.contadorFramesMove = 0
             }
 
-            draw(){
-                ctx.drawImage(spriteStop, spriteStopFrames * 501, 0, 501, 526, spriteMovesX * 40 + W / 2 - 100, H / 2 + 150, 108, 108)
-            }
-
-            update(){
-                if(moveRight){
-                spriteFramecounter++
-                spriteMovesX++;
-                    if(spriteFramecounter == 8){
-                        spriteFramecounter = 0
-                        
-                    }         
-                    }
-                    else{
-                        spriteStopFrames++
-                        if(spriteStopFrames == 8){
-                            spriteStopFrames = 0
-                        }
-                    ctx.drawImage(spriteStop, spriteStopFrames * 501, 0, 501, 526, spriteMovesX * 40 + W / 2 - 100, H / 2 + 150, 108, 108)
-                    console.log("ELESE")
-                    }
-
-                if (moveLeft){
-                    spriteFramecounter++
-                    spriteMovesX--;
-                        if(spriteFramecounter == 8){
-                            spriteFramecounter = 0
-                        }
-                }else{
+            draw() {
+                // console.log(canvas.width)
+                if (this.contadorFrames == 9) {
+                    this.contadorFrames = 0
                     spriteStopFrames++
-                    if(spriteStopFrames == 8){
+                    if (spriteStopFrames == 8) {
                         spriteStopFrames = 0
                     }
-                    ctx.drawImage(spriteStop, spriteStopFrames * 501, 0, 501, 526, spriteMovesX * 40 + W / 2 - 100, H / 2 + 150, 108, 108)
+                } else {
+                    this.contadorFrames++
+                }
+                if (!moveRight && !moveLeft) {
+                    ctx.drawImage(spriteStop, spriteStopFrames * 501, 0, 501, 526, spriteMovesX * 30 + W / 2 - 100, H / 2 + 150, 108, 108)
+                }
+            }
+
+            update() {
+                if (this.contadorFramesMove == 10) {
+                    this.contadorFramesMove = 0
+                    if (moveRight) {
+                        spriteFramecounter++
+                        spriteMovesX++
+                        spriteXValue = spriteMovesX + (spriteTestImage.width / 8)
+                        if (spriteFramecounter == 8) {
+                            spriteFramecounter = 0
+
+                        }
+                    }
+                } else {
+                    this.contadorFramesMove++
+                }
+
+                if (moveRight) {
+                    ctx.drawImage(spriteTestImage, spriteFramecounter * 498, 0, 517, 517, spriteMovesX * 30 + W / 2 - 100, H / 2 + 150, 100, 100)
+                }
+
+                if (this.contadorFramesMove == 2) {
+                    if (moveLeft) {
+                        spriteFramecounter++
+                        spriteMovesX--;
+                        if (spriteFramecounter == 8) {
+                            spriteFramecounter = 0
+                        }
+                    }
+                } else {
+                    this.contadorFramesMove++
+                }
+                if (moveLeft) {
+                    ctx.drawImage(spriteTestImage2, spriteFramecounter * 498, 0, 517, 517, spriteMovesX * 30 + W / 2 - 100, H / 2 + 150, 100, 100)
                 }
             }
         }
+        class player2{
+            
+        }
 
-        class Harpoon{
-            constructor(x, y, v){
+        class Harpoon {
+            constructor(x, y, v) {
                 this.xHarpoon = x; //x posição inicial
                 this.yHarpoon = y; //y posição inicial
                 this.vHarpoon = v; //velociade do arpão
             }
 
-            draw()
-            {   
-                //Triângulo do arpão
+            draw() {
                 ctx.fillStyle = 'red'
                 ctx.beginPath();
+                //harpon position to follow the player
+
                 ctx.moveTo(this.xHarpoon + 50, this.yHarpoon + 25)
                 ctx.lineTo(this.xHarpoon + 65, this.yHarpoon + 25)
                 ctx.lineTo(this.xHarpoon + 57, this.yHarpoon + 10)
@@ -136,33 +183,44 @@
                 ctx.fillStyle = 'grey'
                 ctx.fillRect(this.xHarpoon + 53, this.yHarpoon + 45, 10, 20)
                 ctx.fillStyle = 'red'
-                ctx.fillRect(this.xHarpoon + 55, this.yHarpoon + 35 , 5, 10)
+                ctx.fillRect(this.xHarpoon + 55, this.yHarpoon + 35, 5, 10)
                 ctx.fillStyle = 'black'
-                ctx.fillRect(this.xHarpoon + 55, this.yHarpoon + 25 , 5, 10)
+                ctx.fillRect(this.xHarpoon + 55, this.yHarpoon + 25, 5, 10)
                 ctx.stroke();
                 ctx.fill();
+
             }
 
-            update(){
+            update() {
                 if (moveRight) {
                     harpoonMovesX++;
                 }
 
-                if (moveLeft){
+                if (moveLeft) {
                     harpoonMovesX--;
                 }
+
             }
         }
-
         let harpoon1 = new Harpoon(harpoonMovesX * 40 + W / 2 - 100, H / 2 + 150)
-
         let player1 = new Player1
-
+        let lastSpawningBall = true;
         let ball = new Array();
+        let ballColors = ['rgb(124, 75, 43)', 'rgb(181, 110, 64)', 'rgb(58, 146, 128)', 'rgb(145, 124, 111)', 'rgb(119, 226, 47)']
 
-        function newBall(){
-            ball.push(new Ball( Math.random() * W, 0, Math.random() * 40, 'rgba(0,0,0,0.9)', Math.random() * 4))
+        function newBall() {
+            console.log(ballColors)
+            let r = Math.random() * (90 - 80) + 80
+            //ball.push(new Ball(Math.random() * W, 0, Math.random() * 40, 'rgba(0,0,0,0.9)', Math.random() * 4, Math.random() * 2 * Math.PI))
+            if (lastSpawningBall) {
+                ball.push(new Ball(W / 50 + 100, H / 30 + 100, r, ballColors[Math.floor(Math.random() * ballColors.length)], Math.random() * (6 - 2) + 2, Math.random() * (10 - 0) * Math.PI / 180))
+                lastSpawningBall = !lastSpawningBall
+            }
+            else {
+                ball.push(new Ball(W - (W / 50 + 100), H / 30 + 100, r, ballColors[Math.floor(Math.random() * ballColors.length)], Math.random() * (6 - 2) + 2, Math.random() * (190 - 180) + 180 * Math.PI / 180))
+                lastSpawningBall = !lastSpawningBall
 
+            }
         }
         for (let i = 0; i < 4; i++) {
             newBall()
@@ -171,31 +229,28 @@
 
         //Criação da personagem
         let personagem = new Image();
-            personagem.src = "images/SpriteTestImage.png"
+        personagem.src = "images/SpriteTestImage.png"
         let moveRight = false
         let moveLeft = false;
         let characterCounter1 = 0;
         //Controlador de comandos de movimento
-        function arrowPressed(e){
-            if(e.key == "ArrowRight"){
+        function arrowPressed(e) {
+            if (e.key == "ArrowRight") {
                 moveRight = true;
                 //console.log("clicou")
             }
-            if(e.key == "ArrowLeft"){
+            if (e.key == "ArrowLeft") {
                 moveLeft = true;
                 //console.log("clicou")
             }
-            if (e.key == ""){
-                
-            }
         }
 
-        function arrowReleased(e){
-            if(e.key == "ArrowRight"){
+        function arrowReleased(e) {
+            if (e.key == "ArrowRight") {
                 //console.log("Largou")
                 moveRight = false;
             }
-            if (e.key == "ArrowLeft"){
+            if (e.key == "ArrowLeft") {
                 //console.log("Largou");
                 moveLeft = false;
             }
@@ -206,81 +261,64 @@
         window.addEventListener("keyup", arrowReleased)
 
 
-        backgroundImage.onload = function(){
-                render();
-                window.setInterval(player1.update, 1000/10)
+        backgroundImage.onload = function () {
+            render()
+            //window.setInterval(player1.draw, 1000 / 100)
         }
-        
+
         //Teste sprite move
-            function moveTest(){
-              
-            }
+        function moveTest() {
+
+
+        }
 
         //Fim teste sprite move
 
         //ctx.drawImage(spriteStop, spriteStopFrames * 501, 0, 501, 526, spriteMovesX * 20 + W / 2 - 100, H / 2 + 150, 108, 108)
-         
 
-        function render(){
+
+        function render() {
             //console.log("Funcao")
-            ctx.clearRect(0,0,W,H)
-            ctx.drawImage(backgroundImage,0,0,W,H)
-            
-            if(!moveRight && !moveLeft){
-               
-                player1.draw()
 
-            }
-            else if (moveRight){
-                ctx.drawImage(spriteTestImage, spriteFramecounter * 500, 0, 517, 517, spriteMovesX * 40 + W / 2 - 100, H / 2 + 150, 100, 100)
-            }
-            else{
-                ctx.drawImage(spriteTestImage2, spriteFramecounter * 500, 0, 517, 517, spriteMovesX * 40 + W / 2 - 100, H / 2 + 150, 100, 100)
-            }
-           //Controlador de personagem
+            ctx.clearRect(0, 0, W, H)
+            ctx.drawImage(backgroundImage, 0, 0, W, H)
 
-           //Controlar o arpão
-           if(!moveRight && !moveLeft){
+            player1.draw()
+            player1.update()
+            //Controlador de personagem
+            if (!moveRight && !moveLeft) {
 
                 harpoon1.draw(harpoonMovesX * 40 + W / 2 - 100, H / 2 + 150)
 
-           }
-           else if (moveRight){
-               harpoon1.draw(harpoonMovesX * 40 + W / 2 - 100, H / 2 + 150)
-           }
-           else{
+            }
+            else if (moveRight) {
                 harpoon1.draw(harpoonMovesX * 40 + W / 2 - 100, H / 2 + 150)
-           }
-            
+            }
+            else {
+                harpoon1.draw(harpoonMovesX * 40 + W / 2 - 100, H / 2 + 150)
+            }
+            //controlador do arpao
+
             //console.log(moveRight)
             //ctx.drawImage(personagem,characterCounter1 * 3 + W / 2 - 100, H / 2 + 150,100,100)
-
-            //border
-            ctx.fillRect(0,0,W / 50, H );
-            ctx.fillRect(W - W/ 50,0,W / 50, H );
-            ctx.fillRect(0,0,W, H / 30 );
-            ctx.fillRect(0,H - H / 30,W, H / 30 );
-
-            //BrickBorder
-            ctx.drawImage(brickBorder, W / 50 ,0 ,W - W / 50, H / 30 )
-            ctx.drawImage(brickBorder, W / 50 ,H - H / 30, W - W / 50 , H / 30)
-            ctx.drawImage(brickBorder, 0 , 0, W / 50, H)
-            ctx.drawImage(brickBorder, W - W / 50 , 0, W / 50, H)
-
-            //Neon Border
-            //ctx.drawImage(borderV, 0 , 0, W / 50, H)
-            //ctx.drawImage(borderV, W - W / 50 , 0, W / 50, H)
-            //ctx.drawImage(borderH, 0 ,0 ,W , H / 30 )
-            //ctx.drawImage(borderH, 0 ,H - H / 30, W , H / 30)
-
-
+            ctx.fillRect(0, 0, W / 50, H);
+            ctx.fillRect(W - W / 50, 0, W / 50, H);
+            ctx.fillRect(0, 0, W, H / 30);
+            ctx.fillRect(0, H - H / 30, W, H / 30);
+            ctx.drawImage(brickBorder, W / 50, 0, W - W / 50, H / 30)
+            ctx.drawImage(brickBorder, W / 50, H - H / 30, W - W / 50, H / 30)
+            ctx.drawImage(brickBorder, 0, 0, W / 50, H)
+            ctx.drawImage(brickBorder, W - W / 50, 0, W / 50, H)
             ball.forEach(ball => {
-                ball.draw() 
+                ball.draw()
                 ball.update()
+                ball.contact()
+
                 console.log(ball)
             });
             window.requestAnimationFrame(render)
         }
     </script>
 </body>
+
 </html>

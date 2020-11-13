@@ -13,34 +13,37 @@
         Your browser does not support HTML5 Canvas.
     </canvas>
 
-
-
     <script>
+        //Context Definition
         const canvas = document.querySelector("#myCanvas");
         canvas.width = innerWidth;
         canvas.height = innerHeight;
         const ctx = canvas.getContext("2d");
-        let backgroundImage = new Image()
-        backgroundImage.src = 'images/backgroundImage.png'
+        
+        //Variables Declaration
         const W = canvas.width
         const H = canvas.height
         let spriteFramecounter = 0
         let spriteStopFrames = 0
-        let spriteTestImage = new Image()
-        spriteTestImage.src = 'images/characterRunning.png'
-        let spriteStop = new Image()
-        spriteStop.src = "images/characterStop.png"
-        let spriteTestImage2 = new Image()
-        spriteTestImage2.src = 'images/characterRunning 2.png'
         let spriteMovesX = 0
         let spriteXValue = 0
         let harpoonMovesX = spriteMovesX;
+
+        //Loading Images
         let brickBorder = new Image()
         brickBorder.src = 'images/bricks.png'
         let borderH = new Image()
         borderH.src = 'images/wave.png'
         let borderV = new Image()
         borderV.src = 'images/wave_vertical.png'
+        let spriteTestImage = new Image()
+        spriteTestImage.src = 'images/characterRunning.png'
+        let spriteStop = new Image()
+        spriteStop.src = "images/characterStop.png"
+        let spriteTestImage2 = new Image()
+        spriteTestImage2.src = 'images/characterRunning 2.png'
+        let backgroundImage = new Image()
+        backgroundImage.src = 'images/backgroundImage.png'
 
         class Ball {
             constructor(x, y, r, c, v, d) {
@@ -52,7 +55,7 @@
                 this.dX = v * Math.cos(d)//direção X
                 this.dY = v * Math.sin(d)//direção Y
                 this.a = 0.7
-
+                this.state = "Alive";
             }
 
             draw() {
@@ -61,8 +64,6 @@
                 ctx.beginPath();
                 ctx.arc(this.xBall, this.yBall, this.rBall, 0, 2 * Math.PI);
                 ctx.fill();
-
-
             }
 
             update() {
@@ -70,7 +71,7 @@
                 if (this.yBall >= H - H / 5.5 - this.rBall || this.yBall <= 0 + W / 50 + this.rBall - 10) {
                     this.dY = -this.dY
 
-                    console.log('inverteu')
+                    //console.log('inverteu')
                 } else { this.dY += this.a }
 
                 if (this.xBall >= W - H / 30 - this.rBall) {
@@ -80,7 +81,7 @@
                 if (this.xBall <= 0 + H / 30 + this.rBall + 3) {
                     this.dX = -this.dX
 
-                    console.log('inverteu')
+                    //console.log('inverteu')
                 }
 
 
@@ -157,22 +158,23 @@
                 }
             }
         }
+        
         class player2{
             
         }
 
         class Harpoon {
             constructor(x, y, v) {
-                this.xHarpoon = x; //x posição inicial
-                this.yHarpoon = y; //y posição inicial
-                this.vHarpoon = v; //velociade do arpão
+                this.xHarpoon =  W / 2 - 100; //x posição inicial
+                this.yHarpoon =  H / 2 + 150; //y posição inicial
+                this.vHarpoon = 5; //velociade do arpão
             }
 
             draw() {
-                ctx.fillStyle = 'red'
+                
+                    ctx.fillStyle = 'red'
                 ctx.beginPath();
                 //harpon position to follow the player
-
                 ctx.moveTo(this.xHarpoon + 50, this.yHarpoon + 25)
                 ctx.lineTo(this.xHarpoon + 65, this.yHarpoon + 25)
                 ctx.lineTo(this.xHarpoon + 57, this.yHarpoon + 10)
@@ -187,29 +189,47 @@
                 ctx.fillStyle = 'black'
                 ctx.fillRect(this.xHarpoon + 55, this.yHarpoon + 25, 5, 10)
                 ctx.stroke();
-                ctx.fill();
-
+                ctx.fill();   
             }
 
             update() {
                 if (moveRight) {
-                    harpoonMovesX++;
+                    this.xHarpoon += this.vHarpoon;
                 }
 
                 if (moveLeft) {
-                    harpoonMovesX--;
+                    this.xHarpoon -= this.vHarpoon;
                 }
+            }
 
+            shoot(x, y) {
+                ctx.beginPath();
+                ctx.moveTo(x + 50, y + 25)
+                ctx.lineTo(x + 65, y + 25)
+                ctx.lineTo(x + 57, y + 10)
+                ctx.fill();
+                ctx.closePath();
+                //Retângulos do arpão
+                ctx.beginPath();
+                ctx.fillStyle = 'grey'
+                ctx.fillRect(x + 53, y + 45, 10, 20)
+                ctx.fillStyle = 'red'
+                ctx.fillRect(x + 55, y + 35, 5, 10)
+                ctx.fillStyle = 'black'
+                ctx.fillRect(x + 55, y + 25, 5, 10)
+                ctx.stroke();
+                ctx.fill();
             }
         }
-        let harpoon1 = new Harpoon(harpoonMovesX * 40 + W / 2 - 100, H / 2 + 150)
+
+        let harpoon1 = new Harpoon
         let player1 = new Player1
         let lastSpawningBall = true;
         let ball = new Array();
         let ballColors = ['rgb(124, 75, 43)', 'rgb(181, 110, 64)', 'rgb(58, 146, 128)', 'rgb(145, 124, 111)', 'rgb(119, 226, 47)']
 
         function newBall() {
-            console.log(ballColors)
+            // console.log(ballColors)
             let r = Math.random() * (90 - 80) + 80
             //ball.push(new Ball(Math.random() * W, 0, Math.random() * 40, 'rgba(0,0,0,0.9)', Math.random() * 4, Math.random() * 2 * Math.PI))
             if (lastSpawningBall) {
@@ -219,12 +239,10 @@
             else {
                 ball.push(new Ball(W - (W / 50 + 100), H / 30 + 100, r, ballColors[Math.floor(Math.random() * ballColors.length)], Math.random() * (6 - 2) + 2, Math.random() * (190 - 180) + 180 * Math.PI / 180))
                 lastSpawningBall = !lastSpawningBall
-
             }
         }
         for (let i = 0; i < 4; i++) {
             newBall()
-
         }
 
         //Criação da personagem
@@ -243,6 +261,10 @@
                 moveLeft = true;
                 //console.log("clicou")
             }
+            if (e.keyCode = 32){
+                harpoon1.shoot(spriteFramecounter * 498, 0);
+                console.log("Disparou")
+            }
         }
 
         function arrowReleased(e) {
@@ -259,7 +281,7 @@
         //Controladores de listners
         window.addEventListener("keydown", arrowPressed)
         window.addEventListener("keyup", arrowReleased)
-
+        
 
         backgroundImage.onload = function () {
             render()
@@ -268,7 +290,6 @@
 
         //Teste sprite move
         function moveTest() {
-
 
         }
 
@@ -283,38 +304,26 @@
             ctx.clearRect(0, 0, W, H)
             ctx.drawImage(backgroundImage, 0, 0, W, H)
 
+            //Controlador de personagem
             player1.draw()
             player1.update()
-            //Controlador de personagem
-            if (!moveRight && !moveLeft) {
-
-                harpoon1.draw(harpoonMovesX * 40 + W / 2 - 100, H / 2 + 150)
-
-            }
-            else if (moveRight) {
-                harpoon1.draw(harpoonMovesX * 40 + W / 2 - 100, H / 2 + 150)
-            }
-            else {
-                harpoon1.draw(harpoonMovesX * 40 + W / 2 - 100, H / 2 + 150)
-            }
+            
             //controlador do arpao
+            harpoon1.draw()
+            harpoon1.update()            
 
-            //console.log(moveRight)
-            //ctx.drawImage(personagem,characterCounter1 * 3 + W / 2 - 100, H / 2 + 150,100,100)
-            ctx.fillRect(0, 0, W / 50, H);
-            ctx.fillRect(W - W / 50, 0, W / 50, H);
-            ctx.fillRect(0, 0, W, H / 30);
-            ctx.fillRect(0, H - H / 30, W, H / 30);
-            ctx.drawImage(brickBorder, W / 50, 0, W - W / 50, H / 30)
-            ctx.drawImage(brickBorder, W / 50, H - H / 30, W - W / 50, H / 30)
-            ctx.drawImage(brickBorder, 0, 0, W / 50, H)
-            ctx.drawImage(brickBorder, W - W / 50, 0, W / 50, H)
+            //BrickBorder
+            ctx.drawImage(brickBorder, W / 50 ,0 ,W - W / 50, H / 30 )
+            ctx.drawImage(brickBorder, W / 50 ,H - H / 30, W - W / 50 , H / 30)
+            ctx.drawImage(brickBorder, 0 , 0, W / 50, H)
+            ctx.drawImage(brickBorder, W - W / 50 , 0, W / 50, H)
+
             ball.forEach(ball => {
                 ball.draw()
                 ball.update()
                 ball.contact()
 
-                console.log(ball)
+                //console.log(ball)
             });
             window.requestAnimationFrame(render)
         }

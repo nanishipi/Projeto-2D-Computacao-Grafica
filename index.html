@@ -19,7 +19,7 @@
         canvas.width = innerWidth;
         canvas.height = innerHeight;
         const ctx = canvas.getContext("2d");
-        
+
         //Variables Declaration
         const W = canvas.width
         const H = canvas.height
@@ -107,7 +107,7 @@
             }
 
             draw() {
-                // console.log(canvas.width)
+                //console.log(canvas.width)
                 if (this.contadorFrames == 9) {
                     this.contadorFrames = 0
                     spriteStopFrames++
@@ -123,29 +123,36 @@
             }
 
             update() {
-                if (this.contadorFramesMove == 10) {
-                    this.contadorFramesMove = 0
-                    if (moveRight) {
-                        spriteFramecounter++
-                        spriteMovesX++
-                        spriteXValue = spriteMovesX + (spriteTestImage.width / 8)
-                        if (spriteFramecounter == 8) {
-                            spriteFramecounter = 0
 
-                        }
-                    }
+                if (spriteXValue >= W - 100) {
+                    ctx.drawImage(spriteStop, spriteStopFrames * 501, 0, 501, 526, spriteMovesX * 30 + W / 2 - 100, H / 2 + 150, 108, 108)
                 } else {
-                    this.contadorFramesMove++
-                }
+                    if (this.contadorFramesMove == 10) {
+                        this.contadorFramesMove = 0
+                        if (moveRight) {
+                            spriteFramecounter++
+                            spriteMovesX++
+                            spriteXValue = spriteMovesX * 30 + W / 2 - 100
+                            console.log(spriteXValue)
+                            if (spriteFramecounter == 8) {
+                                spriteFramecounter = 0
 
-                if (moveRight) {
-                    ctx.drawImage(spriteTestImage, spriteFramecounter * 498, 0, 517, 517, spriteMovesX * 30 + W / 2 - 100, H / 2 + 150, 100, 100)
-                }
+                            }
+                        }
+                    } else {
+                        this.contadorFramesMove++
+                    }
 
-                if (this.contadorFramesMove == 2) {
+                    if (moveRight) {
+                        ctx.drawImage(spriteTestImage, spriteFramecounter * 498, 0, 517, 517, spriteMovesX * 30 + W / 2 - 100, H / 2 + 150, 100, 100)
+                    }
+
+                }
+                if (this.contadorFramesMove == 10) {
                     if (moveLeft) {
                         spriteFramecounter++
                         spriteMovesX--;
+                        spriteXValue = spriteMovesX * 30 + W / 2 - 100
                         if (spriteFramecounter == 8) {
                             spriteFramecounter = 0
                         }
@@ -158,21 +165,21 @@
                 }
             }
         }
-        
-        class player2{
-            
+
+        class player2 {
+
         }
 
         class Harpoon {
             constructor(x, y, v) {
-                this.xHarpoon =  W / 2 - 100; //x posição inicial
-                this.yHarpoon =  H / 2 + 150; //y posição inicial
+                this.xHarpoon = W / 2 - 100; //x posição inicial
+                this.yHarpoon = H / 2 + 150; //y posição inicial
                 this.vHarpoon = 5; //velociade do arpão
             }
 
             draw() {
-                
-                    ctx.fillStyle = 'red'
+
+                ctx.fillStyle = 'red'
                 ctx.beginPath();
                 //harpon position to follow the player
                 ctx.moveTo(this.xHarpoon + 50, this.yHarpoon + 25)
@@ -189,7 +196,7 @@
                 ctx.fillStyle = 'black'
                 ctx.fillRect(this.xHarpoon + 55, this.yHarpoon + 25, 5, 10)
                 ctx.stroke();
-                ctx.fill();   
+                ctx.fill();
             }
 
             update() {
@@ -261,7 +268,7 @@
                 moveLeft = true;
                 //console.log("clicou")
             }
-            if (e.keyCode = 32){
+            if (e.keyCode = 32) {
                 harpoon1.shoot(spriteFramecounter * 498, 0);
                 console.log("Disparou")
             }
@@ -281,7 +288,7 @@
         //Controladores de listners
         window.addEventListener("keydown", arrowPressed)
         window.addEventListener("keyup", arrowReleased)
-        
+
 
         backgroundImage.onload = function () {
             render()
@@ -307,16 +314,16 @@
             //Controlador de personagem
             player1.draw()
             player1.update()
-            
+
             //controlador do arpao
             harpoon1.draw()
-            harpoon1.update()            
+            harpoon1.update()
 
             //BrickBorder
-            ctx.drawImage(brickBorder, W / 50 ,0 ,W - W / 50, H / 30 )
+            /*ctx.drawImage(brickBorder, W / 50 ,0 ,W - W / 50, H / 30 )
             ctx.drawImage(brickBorder, W / 50 ,H - H / 30, W - W / 50 , H / 30)
             ctx.drawImage(brickBorder, 0 , 0, W / 50, H)
-            ctx.drawImage(brickBorder, W - W / 50 , 0, W / 50, H)
+            ctx.drawImage(brickBorder, W - W / 50 , 0, W / 50, H)*/
 
             ball.forEach(ball => {
                 ball.draw()

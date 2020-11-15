@@ -148,20 +148,25 @@
                     }
 
                 }
-                if (this.contadorFramesMove == 10) {
-                    if (moveLeft) {
-                        spriteFramecounter++
-                        spriteMovesX--;
-                        spriteXValue = spriteMovesX * 30 + W / 2 - 100
-                        if (spriteFramecounter == 8) {
-                            spriteFramecounter = 0
-                        }
-                    }
+                if (spriteXValue <= 0) {
+                    ctx.drawImage(spriteStop, spriteStopFrames * 501, 0, 501, 526, spriteMovesX * 30 + W / 2 - 100, H / 2 + 150, 108, 108)
                 } else {
-                    this.contadorFramesMove++
-                }
-                if (moveLeft) {
-                    ctx.drawImage(spriteTestImage2, spriteFramecounter * 498, 0, 517, 517, spriteMovesX * 30 + W / 2 - 100, H / 2 + 150, 100, 100)
+                    if (this.contadorFramesMove == 2) {
+                        if (moveLeft) {
+                            spriteFramecounter++
+                            spriteMovesX--;
+                            spriteXValue = spriteMovesX * 30 + W / 2 - 100
+                            console.log(spriteXValue)
+                            if (spriteFramecounter == 8) {
+                                spriteFramecounter = 0
+                            }
+                        }
+                    } else {
+                        this.contadorFramesMove++
+                    }
+                    if (moveLeft) {
+                        ctx.drawImage(spriteTestImage2, spriteFramecounter * 498, 0, 517, 517, spriteMovesX * 30 + W / 2 - 100, H / 2 + 150, 100, 100)
+                    }
                 }
             }
         }
@@ -179,7 +184,7 @@
 
             draw() {
 
-                ctx.fillStyle = 'red'
+                ctx.fillStyle = 'blue'
                 ctx.beginPath();
                 //harpon position to follow the player
                 ctx.moveTo(this.xHarpoon + 50, this.yHarpoon + 25)
@@ -189,23 +194,33 @@
                 ctx.closePath();
                 //Retângulos do arpão
                 ctx.beginPath();
-                ctx.fillStyle = 'grey'
-                ctx.fillRect(this.xHarpoon + 53, this.yHarpoon + 45, 10, 20)
-                ctx.fillStyle = 'red'
+                ctx.fillStyle = 'blue'
+                ctx.fillRect(this.xHarpoon + 55, this.yHarpoon + 45, 5, 10)
+                ctx.fillStyle = 'blue'
                 ctx.fillRect(this.xHarpoon + 55, this.yHarpoon + 35, 5, 10)
-                ctx.fillStyle = 'black'
+                ctx.fillStyle = 'blue'
                 ctx.fillRect(this.xHarpoon + 55, this.yHarpoon + 25, 5, 10)
                 ctx.stroke();
                 ctx.fill();
             }
 
             update() {
+                if (jump) {
+                    this.yHarpoon = H / 2 - 350
+
+                    ctx.beginPath();
+                    ctx.fillStyle = 'blue'
+                    ctx.fillRect(this.xHarpoon + 55, this.yHarpoon + 45, 5, H / 2 + 150)
+
+                } else {
+                    this.yHarpoon = H / 2 + 150;
+                }
                 if (moveRight) {
-                    this.xHarpoon += this.vHarpoon;
+                    this.xHarpoon = spriteMovesX * 30 + W / 2 - 100;
                 }
 
                 if (moveLeft) {
-                    this.xHarpoon -= this.vHarpoon;
+                    this.xHarpoon = spriteMovesX * 30 + W / 2 - 100;
                 }
             }
 
@@ -257,19 +272,24 @@
         personagem.src = "images/SpriteTestImage.png"
         let moveRight = false
         let moveLeft = false;
+        let jump = false
         let characterCounter1 = 0;
         //Controlador de comandos de movimento
         function arrowPressed(e) {
             if (e.key == "ArrowRight") {
                 moveRight = true;
+                jump = false;
                 //console.log("clicou")
             }
             if (e.key == "ArrowLeft") {
                 moveLeft = true;
+                jump = false;
                 //console.log("clicou")
             }
-            if (e.keyCode = 32) {
-                harpoon1.shoot(spriteFramecounter * 498, 0);
+            if (e.keyCode == 32) {
+                if (moveLeft == false && moveRight == false) {
+                    jump = true
+                }
                 console.log("Disparou")
             }
         }
@@ -283,7 +303,12 @@
                 //console.log("Largou");
                 moveLeft = false;
             }
+            if (e.key != 32) {
+                jump = false;
+            }
         }
+
+
 
         //Controladores de listners
         window.addEventListener("keydown", arrowPressed)

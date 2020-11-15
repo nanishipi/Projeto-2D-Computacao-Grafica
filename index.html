@@ -89,7 +89,7 @@
                 this.xBall += this.dX
 
             }
-            
+
         }
 
 
@@ -129,7 +129,7 @@
                             spriteFramecounter++
                             spriteMovesX++
                             spriteXValue = spriteMovesX * 30 + W / 2 - 100
-                            console.log(spriteXValue)
+                            //console.log(spriteXValue)
                             if (spriteFramecounter == 8) {
                                 spriteFramecounter = 0
 
@@ -166,19 +166,19 @@
                 }
             }
             contact(ball) {//condicao de contato com bolas (vida)
-            ball.forEach(ball => {
-                let dx=ball.xBall-spriteXValue-8
-                let dy=ball.yBall-(H / 2 + 190)
-                let d=Math.sqrt(dx*dx+dy*dy)
+                ball.forEach(ball => {
+                    let dx = ball.xBall - spriteXValue - 8
+                    let dy = ball.yBall - (H / 2 + 190)
+                    let d = Math.sqrt(dx * dx + dy * dy)
 
-                console.log(d-ball.rBall)
-                if(d-ball.rBall-10<0){
-                    console.log('colision')
-                    alert('colision')
-                }
-                
-            });
-                
+                    //console.log(d - ball.rBall)
+                    if (d - ball.rBall - 10 < 0) {
+                        console.log('colision')
+                        alert('colision')
+                    }
+
+                });
+
             }
         }
 
@@ -231,11 +231,33 @@
                 }
 
                 if (moveLeft) {
-                    this.xHarpoon = spriteMovesX * 30 + W / 2 -130;
+                    this.xHarpoon = spriteMovesX * 30 + W / 2 - 130;
                 }
-                if (!moveLeft&&!moveRight) {
+                if (!moveLeft && !moveRight) {
                     this.xHarpoon = spriteMovesX * 30 + W / 2 - 100;
                 }
+            }
+            ballContact(ball) {
+                let ballSplit=false
+                ball.forEach(ball => {
+                    for (let i = this.yHarpoon + 45; i < H / 2 + 150; i++) {
+
+                        let dx = ball.xBall-ball.rBall - this.xHarpoon + 55
+                        let dy = ball.yBall - i
+                        let d = Math.sqrt(dx * dx + dy * dy)
+                        //console.log(d)
+                        if (d<ball.rBall&&!ballSplit) {
+                            console.log('ball split')
+                            ballSplit=true
+                            break;
+                        }
+
+                    }
+
+
+
+                });
+
             }
 
             shoot(x, y) {
@@ -319,6 +341,7 @@
             }
             if (e.key != 32) {
                 jump = false;
+                harpoon1.ballContact(ball)
             }
         }
 
@@ -357,6 +380,7 @@
             //controlador do arpao
             harpoon1.draw()
             harpoon1.update()
+            
 
             //BrickBorder
             /*ctx.drawImage(brickBorder, W / 50 ,0 ,W - W / 50, H / 30 )
@@ -367,8 +391,8 @@
             ball.forEach(ball => {
                 ball.draw()
                 ball.update()
-                
-                
+
+
 
                 //console.log(ball)
             });

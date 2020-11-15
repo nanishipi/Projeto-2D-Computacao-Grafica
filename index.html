@@ -89,11 +89,7 @@
                 this.xBall += this.dX
 
             }
-            contact() {
-                if (this.x) {
-
-                }
-            }
+            
         }
 
 
@@ -156,7 +152,7 @@
                             spriteFramecounter++
                             spriteMovesX--;
                             spriteXValue = spriteMovesX * 30 + W / 2 - 100
-                            console.log(spriteXValue)
+                            //console.log(spriteXValue)
                             if (spriteFramecounter == 8) {
                                 spriteFramecounter = 0
                             }
@@ -168,6 +164,21 @@
                         ctx.drawImage(spriteTestImage2, spriteFramecounter * 498, 0, 517, 517, spriteMovesX * 30 + W / 2 - 100, H / 2 + 150, 100, 100)
                     }
                 }
+            }
+            contact(ball) {//condicao de contato com bolas (vida)
+            ball.forEach(ball => {
+                let dx=ball.xBall-spriteXValue-8
+                let dy=ball.yBall-(H / 2 + 190)
+                let d=Math.sqrt(dx*dx+dy*dy)
+
+                console.log(d-ball.rBall)
+                if(d-ball.rBall-10<0){
+                    console.log('colision')
+                    alert('colision')
+                }
+                
+            });
+                
             }
         }
 
@@ -220,6 +231,9 @@
                 }
 
                 if (moveLeft) {
+                    this.xHarpoon = spriteMovesX * 30 + W / 2 -130;
+                }
+                if (!moveLeft&&!moveRight) {
                     this.xHarpoon = spriteMovesX * 30 + W / 2 - 100;
                 }
             }
@@ -263,7 +277,7 @@
                 lastSpawningBall = !lastSpawningBall
             }
         }
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 1; i++) {
             newBall()
         }
 
@@ -339,7 +353,7 @@
             //Controlador de personagem
             player1.draw()
             player1.update()
-
+            player1.contact(ball)
             //controlador do arpao
             harpoon1.draw()
             harpoon1.update()
@@ -353,7 +367,8 @@
             ball.forEach(ball => {
                 ball.draw()
                 ball.update()
-                ball.contact()
+                
+                
 
                 //console.log(ball)
             });

@@ -84,10 +84,11 @@
 
                     //console.log('inverteu')
                 }
-                if (this.rBall<20) {
-                    ball.splice(idx,1)
+                if (this.rBall < 20) {
+                    ball.splice(idx, 1)
                 }
-                
+
+
 
 
                 this.yBall += this.dY
@@ -106,6 +107,7 @@
                 this.contadorFrames = 0
                 this.contadorFramesMove = 0
                 this.lives = 3
+                this.points = 0
             }
 
             draw() {
@@ -254,9 +256,9 @@
             ballContact(ball) {
                 let ballSplit = false
                 ball.forEach(ball => {
-                    for (let i = this.yHarpoon + 45; i < H / 2 + 150; i++) {
+                    for (let i = this.yHarpoon + 45; i <= H; i++) {
 
-                        let dx = ball.xBall - ball.rBall - this.xHarpoon + 55
+                        let dx = ball.xBall - ball.rBall - this.xHarpoon
                         let dy = ball.yBall - i
                         let d = Math.sqrt(dx * dx + dy * dy)
                         //console.log(d)
@@ -265,6 +267,9 @@
                             ball.rBall = ball.rBall / 2
                             createNewBall = [ball.rBall, ball.xBall, ball.yBall]
                             ballSplit = true
+                            player1.points += 10
+
+
                             break;
                         }
                         if (d > ball.rBall) {
@@ -299,7 +304,7 @@
                 ctx.fill();
             }
         }
-
+        let level = 1
         let harpoon1 = new Harpoon
         let player1 = new Player1
         let lastSpawningBall = true;
@@ -404,24 +409,36 @@
 
             ctx.font = "30px Arial";
             ctx.strokeText(`Lives: ${player1.lives}`, 10, 50);
+            ctx.font = "30px Arial";
+            ctx.strokeText(`Points: ${player1.points}`, 10, 100);
+            ctx.font = "30px Arial";
+            ctx.strokeText(`Level: ${level}`, W-W/10, 50);
             //BrickBorder
             /*ctx.drawImage(brickBorder, W / 50 ,0 ,W - W / 50, H / 30 )
             ctx.drawImage(brickBorder, W / 50 ,H - H / 30, W - W / 50 , H / 30)
             ctx.drawImage(brickBorder, 0 , 0, W / 50, H)
             ctx.drawImage(brickBorder, W - W / 50 , 0, W / 50, H)*/
-           
-            ball.forEach(function(ball,index)  {
+
+            ball.forEach(function (ball, index) {
                 ball.draw()
                 ball.update(index)
-                
+
 
                 //console.log(ball)
             });
-            
+
             if (createNewBall[0]) {
                 console.log(createNewBall[2])
                 ball.push(new Ball(createNewBall[1], createNewBall[2], createNewBall[0], ballColors[Math.floor(Math.random() * ballColors.length)], Math.random() * (6 - 2) + 2, Math.random() * (10 - 0) * Math.PI / 180))
                 createNewBall[0] = 0
+            }
+            if (ball.length == 1 && player1.points > 50) {
+                for (let i = 0; i <= level; i++) {
+
+                    newBall()
+                }
+                level++
+
             }
             window.requestAnimationFrame(render)
         }

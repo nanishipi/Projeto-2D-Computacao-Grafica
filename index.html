@@ -66,10 +66,11 @@
                 ctx.fill();
             }
 
-            update() {
+            update(idx) {
 
                 if (this.yBall >= H - H / 5.5 - this.rBall || this.yBall <= 0 + W / 50 + this.rBall - 10) {
                     this.dY = -this.dY
+
 
                     //console.log('inverteu')
                 } else { this.dY += this.a }
@@ -83,6 +84,10 @@
 
                     //console.log('inverteu')
                 }
+                if (this.rBall<20) {
+                    ball.splice(idx,1)
+                }
+                
 
 
                 this.yBall += this.dY
@@ -100,6 +105,7 @@
                 this.vPlayer = v; //velocidade de andamento
                 this.contadorFrames = 0
                 this.contadorFramesMove = 0
+                this.lives = 3
             }
 
             draw() {
@@ -166,15 +172,23 @@
                 }
             }
             contact(ball) {//condicao de contato com bolas (vida)
+
                 ball.forEach(ball => {
                     let dx = ball.xBall - spriteXValue - 8
                     let dy = ball.yBall - (H / 2 + 190)
                     let d = Math.sqrt(dx * dx + dy * dy)
 
                     //console.log(d - ball.rBall)
-                    if (d - ball.rBall - 10 < 0) {
+                    if (d - ball.rBall - 10 < 0 && !col) {
                         console.log('colision')
-                        alert('colision')
+                        //menos uma vida
+                        player1.lives--
+
+                        col = true
+                    }
+                    console.log(d - ball.rBall)
+                    if (d - ball.rBall - 10 > 0 && col) {
+                        col = false
                     }
 
                 });
@@ -238,19 +252,25 @@
                 }
             }
             ballContact(ball) {
-                let ballSplit=false
+                let ballSplit = false
                 ball.forEach(ball => {
                     for (let i = this.yHarpoon + 45; i < H / 2 + 150; i++) {
 
-                        let dx = ball.xBall-ball.rBall - this.xHarpoon + 55
+                        let dx = ball.xBall - ball.rBall - this.xHarpoon + 55
                         let dy = ball.yBall - i
                         let d = Math.sqrt(dx * dx + dy * dy)
                         //console.log(d)
-                        if (d<ball.rBall&&!ballSplit) {
+                        if (d < ball.rBall && !ballSplit) {
                             console.log('ball split')
-                            ballSplit=true
+                            ball.rBall = ball.rBall / 2
+                            createNewBall = [ball.rBall, ball.xBall, ball.yBall]
+                            ballSplit = true
                             break;
                         }
+                        if (d > ball.rBall) {
+                            ballSplit = false
+                        }
+
 
                     }
 
@@ -285,7 +305,8 @@
         let lastSpawningBall = true;
         let ball = new Array();
         let ballColors = ['rgb(124, 75, 43)', 'rgb(181, 110, 64)', 'rgb(58, 146, 128)', 'rgb(145, 124, 111)', 'rgb(119, 226, 47)']
-
+        let col = false
+        let createNewBall = [0, 0, 0]
         function newBall() {
             // console.log(ballColors)
             let r = Math.random() * (90 - 80) + 80
@@ -380,22 +401,28 @@
             //controlador do arpao
             harpoon1.draw()
             harpoon1.update()
-            
 
+            ctx.font = "30px Arial";
+            ctx.strokeText(`Lives: ${player1.lives}`, 10, 50);
             //BrickBorder
             /*ctx.drawImage(brickBorder, W / 50 ,0 ,W - W / 50, H / 30 )
             ctx.drawImage(brickBorder, W / 50 ,H - H / 30, W - W / 50 , H / 30)
             ctx.drawImage(brickBorder, 0 , 0, W / 50, H)
             ctx.drawImage(brickBorder, W - W / 50 , 0, W / 50, H)*/
-
-            ball.forEach(ball => {
+           
+            ball.forEach(function(ball,index)  {
                 ball.draw()
-                ball.update()
-
-
+                ball.update(index)
+                
 
                 //console.log(ball)
             });
+            
+            if (createNewBall[0]) {
+                console.log(createNewBall[2])
+                ball.push(new Ball(createNewBall[1], createNewBall[2], createNewBall[0], ballColors[Math.floor(Math.random() * ballColors.length)], Math.random() * (6 - 2) + 2, Math.random() * (10 - 0) * Math.PI / 180))
+                createNewBall[0] = 0
+            }
             window.requestAnimationFrame(render)
         }
     </script>

@@ -26,6 +26,7 @@
         let spriteFramecounter = 0
         let spriteStopFrames = 0
         let spriteMovesX = 0
+        let spritesecMovesX = 0
         let spriteXValue = 0
         let harpoonMovesX = spriteMovesX;
 
@@ -44,6 +45,12 @@
         spriteTestImage2.src = 'images/characterRunning 2.png'
         let backgroundImage = new Image()
         backgroundImage.src = 'images/backgroundImage.png'
+        let spriteSecPlayer = new Image()
+        spriteSecPlayer.src = "images/running.png"
+        let spriteSecStop = new Image()
+        spriteSecStop.src = "images/characterStopRed.png"
+        let spriteSecLeft = new Image()
+        spriteSecLeft.src = "images/runningLeft.png"
 
         class Ball {
             constructor(x, y, r, c, v, d) {
@@ -54,8 +61,11 @@
                 //this.vBall = v; //velocidade
                 this.dX = v * Math.cos(d)//direção X
                 this.dY = v * Math.sin(d)//direção Y
-                this.a = 0.7
+                this.a = 0.09
                 this.state = "Alive";
+                this.colP1 = false
+                this.colP2 = false
+                this.ballSplit = false
             }
 
             draw() {
@@ -181,16 +191,16 @@
                     let d = Math.sqrt(dx * dx + dy * dy)
 
                     //console.log(d - ball.rBall)
-                    if (d - ball.rBall - 10 < 0 && !col) {
+                    if (d - ball.rBall - 10 < 0 && !ball.colp1) {
                         console.log('colision')
                         //menos uma vida
                         player1.lives--
 
-                        col = true
+                        ball.colp1 = true
                     }
-                    console.log(d - ball.rBall)
-                    if (d - ball.rBall - 10 > 0 && col) {
-                        col = false
+                    //console.log(d - ball.rBall)
+                    if (d - ball.rBall - 10 > 0 && ball.colp1) {
+                        ball.colp1 = false
                     }
 
                 });
@@ -198,20 +208,111 @@
             }
         }
 
-        class player2 {
+        class Player2 {
+            constructor() {
+                this.spriteFramecounter = 0
+                this.spriteStopFrames = 0
+
+                this.spriteXValue = 0
+                this.contadorFrames = 0
+                this.contadorFramesMove = 0
+            }
+            draw() {
+                if (this.contadorFrames == 9) {
+                    this.contadorFrames = 0
+                    this.spriteStopFrames++
+                    if (this.spriteStopFrames == 8) {
+                        this.spriteStopFrames = 0
+                    }
+                } else {
+                    this.contadorFrames++
+                }
+                if (!secMoveRight && !secMoveLeft) {
+                    ctx.drawImage(spriteSecStop, this.spriteStopFrames * 501, 0, 501, 526, spritesecMovesX * 30 + W / 2 - 79, H / 2 + 150, 108, 108)
+                }
+            }
+            contact(ball) {//condicao de contato com bolas (vida)
+
+                ball.forEach(ball => {
+                    let dx = ball.xBall - this.spriteXValue - 8
+                    let dy = ball.yBall - (H / 2 + 190)
+                    let d = Math.sqrt(dx * dx + dy * dy)
+
+                    //console.log(d - ball.rBall)
+                    if (d - ball.rBall - 10 < 0 && !ball.colP2) {
+                        console.log('colision')
+                        //menos uma vida
+                        player1.lives--
+
+                        ball.colP2 = true
+                    }
+                    // console.log(d - ball.rBall)
+                    if (d - ball.rBall - 10 > 0 && ball.colP2) {
+                        ball.colP2 = false
+                    }
+
+                });
+
+            }
+            update() {
+                if (this.spriteXValue >= W - 100) {
+                    ctx.drawImage(spriteSecStop, this.spriteStopFrames * 501, 0, 501, 526, spritesecMovesX * 30 + W / 2 - 79, H / 2 + 150, 108, 108)
+                } else {
+                    if (this.contadorFramesMove == 10) {
+                        this.contadorFramesMove = 0
+                        if (secMoveRight) {
+                            this.spriteFramecounter++
+                            spritesecMovesX++
+                            this.spriteXValue = spritesecMovesX * 30 + W / 2 - 100
+                            //console.log(this.spriteXValue)
+                            if (this.spriteFramecounter == 8) {
+                                this.spriteFramecounter = 0
+
+                            }
+                        }
+                    } else {
+                        this.contadorFramesMove++
+                    }
+
+                    if (secMoveRight) {
+                        ctx.drawImage(spriteSecPlayer, this.spriteFramecounter * 498, 0, 517, 517, spritesecMovesX * 30 + W / 2 - 79, H / 2 + 150, 100, 100)
+                    }
+
+                }
+                if (this.spriteXValue <= 0) {
+                    ctx.drawImage(spriteSecStop, this.spriteStopFrames * 501, 0, 501, 526, spritesecMovesX * 30 + W / 2 - 79, H / 2 + 150, 108, 108)
+                } else {
+                    if (this.contadorFramesMove == 2) {
+                        if (secMoveLeft) {
+                            this.spriteFramecounter++
+                            spritesecMovesX--;
+                            this.spriteXValue = spritesecMovesX * 30 + W / 2 - 100
+                            //console.log(this.spriteXValue)
+                            if (this.spriteFramecounter == 8) {
+                                this.spriteFramecounter = 0
+                            }
+                        }
+                    } else {
+                        this.contadorFramesMove++
+                    }
+                    if (secMoveLeft) {
+                        ctx.drawImage(spriteSecLeft, this.spriteFramecounter * 498, 0, 517, 517, spritesecMovesX * 30 + W / 2 - 79, H / 2 + 150, 100, 100)
+                    }
+                }
+            }
 
         }
-
-        class Harpoon {
+        class Harpoon2 {
             constructor(x, y, v) {
                 this.xHarpoon = W / 2 - 100; //x posição inicial
                 this.yHarpoon = H / 2 + 150; //y posição inicial
                 this.vHarpoon = 5; //velociade do arpão
             }
 
+
             draw() {
 
-                ctx.fillStyle = 'blue'
+                ctx.fillStyle = 'red'
                 ctx.beginPath();
                 //harpon position to follow the player
                 ctx.moveTo(this.xHarpoon + 50, this.yHarpoon + 25)
@@ -221,59 +322,65 @@
                 ctx.closePath();
                 //Retângulos do arpão
                 ctx.beginPath();
-                ctx.fillStyle = 'blue'
+                ctx.fillStyle = 'red'
                 ctx.fillRect(this.xHarpoon + 55, this.yHarpoon + 45, 5, 10)
-                ctx.fillStyle = 'blue'
+                ctx.fillStyle = 'red'
                 ctx.fillRect(this.xHarpoon + 55, this.yHarpoon + 35, 5, 10)
-                ctx.fillStyle = 'blue'
+                ctx.fillStyle = 'red'
                 ctx.fillRect(this.xHarpoon + 55, this.yHarpoon + 25, 5, 10)
                 ctx.stroke();
                 ctx.fill();
             }
 
             update() {
-                if (jump) {
+
+                if (secJump) {
                     this.yHarpoon = H / 2 - 350
 
                     ctx.beginPath();
-                    ctx.fillStyle = 'blue'
+                    ctx.fillStyle = 'red'
+
                     ctx.fillRect(this.xHarpoon + 55, this.yHarpoon + 45, 5, H / 2 + 150)
 
                 } else {
                     this.yHarpoon = H / 2 + 150;
                 }
-                if (moveRight) {
-                    this.xHarpoon = spriteMovesX * 30 + W / 2 - 100;
+                if (secMoveRight) {
+                    this.xHarpoon = spritesecMovesX * 30 + W / 2 - 80;
                 }
 
-                if (moveLeft) {
-                    this.xHarpoon = spriteMovesX * 30 + W / 2 - 130;
+                if (secMoveLeft) {
+                    this.xHarpoon = spritesecMovesX * 30 + W / 2 - 100;
                 }
-                if (!moveLeft && !moveRight) {
-                    this.xHarpoon = spriteMovesX * 30 + W / 2 - 100;
+                if (!secMoveLeft && !secMoveRight) {
+                    this.xHarpoon = spritesecMovesX * 30 + W / 2 - 80;
                 }
+
+
             }
             ballContact(ball) {
-                let ballSplit = false
+
                 ball.forEach(ball => {
                     for (let i = this.yHarpoon + 45; i <= H; i++) {
+
 
                         let dx = ball.xBall - ball.rBall - this.xHarpoon
                         let dy = ball.yBall - i
                         let d = Math.sqrt(dx * dx + dy * dy)
                         //console.log(d)
-                        if (d < ball.rBall && !ballSplit) {
+
+                        if (d < ball.rBall && !ball.ballSplit) {
                             console.log('ball split')
                             ball.rBall = ball.rBall / 2
                             createNewBall = [ball.rBall, ball.xBall, ball.yBall]
-                            ballSplit = true
+                            ball.ballSplit = true
                             player1.points += 10
 
 
                             break;
                         }
                         if (d > ball.rBall) {
-                            ballSplit = false
+                            ball.ballSplit = false
                         }
 
 
@@ -304,17 +411,147 @@
                 ctx.fill();
             }
         }
+
+        class Harpoon {
+            constructor(x, y, v) {
+                this.xHarpoon = W / 2 - 100; //x posição inicial
+                this.yHarpoon = H / 2 + 150; //y posição inicial
+                this.vHarpoon = 5; //velociade do arpão
+            }
+
+            draw() {
+
+                ctx.fillStyle = 'blue'
+                ctx.beginPath();
+                //harpon position to follow the player
+                ctx.moveTo(this.xHarpoon + 50, this.yHarpoon + 25)
+                ctx.lineTo(this.xHarpoon + 65, this.yHarpoon + 25)
+                ctx.lineTo(this.xHarpoon + 57, this.yHarpoon + 10)
+                ctx.fill();
+                ctx.closePath();
+                //Retângulos do arpão
+                ctx.beginPath();
+                ctx.fillStyle = 'blue'
+                ctx.fillRect(this.xHarpoon + 55, this.yHarpoon + 45, 5, 10)
+                ctx.fillStyle = 'blue'
+                ctx.fillRect(this.xHarpoon + 55, this.yHarpoon + 35, 5, 10)
+                ctx.fillStyle = 'blue'
+                ctx.fillRect(this.xHarpoon + 55, this.yHarpoon + 25, 5, 10)
+                ctx.stroke();
+                ctx.fill();
+
+            }
+
+            update() {
+
+                if (jump) {
+                    this.yHarpoon = H / 2 - 350
+
+                    ctx.beginPath();
+                    ctx.fillStyle = 'blue'
+
+                    ctx.fillRect(this.xHarpoon + 55, this.yHarpoon + 45, 5, H / 2 + 150)
+
+
+
+                } else {
+                    this.yHarpoon = H / 2 + 150;
+
+
+
+                }
+                if (moveRight) {
+                    this.xHarpoon = spriteMovesX * 30 + W / 2 - 100;
+                }
+
+                if (moveLeft) {
+                    this.xHarpoon = spriteMovesX * 30 + W / 2 - 130;
+                }
+                if (!moveLeft && !moveRight) {
+                    this.xHarpoon = spriteMovesX * 30 + W / 2 - 100;
+                }
+
+            }
+            ballContact(ball) {
+
+                ball.forEach(ball => {
+                    for (let i = this.yHarpoon + 45; i <= H; i++) {
+
+
+                        let dx = ball.xBall - ball.rBall - this.xHarpoon
+                        let dy = ball.yBall - i
+                        let d = Math.sqrt(dx * dx + dy * dy)
+
+                        //console.log(d)
+                        if (d < ball.rBall && !ball.ballSplit) {
+                            console.log('ball split')
+                            ball.rBall = ball.rBall / 2
+                            createNewBall = [ball.rBall, ball.xBall, ball.yBall]
+                            ball.ballSplit = true
+                            player1.points += 10
+
+
+                            break;
+                        }
+                        if (d > ball.rBall) {
+                            ball.ballSplit = false
+                        }
+
+
+                    }
+                    jump = false
+
+
+                });
+
+
+
+
+            }
+
+            shoot(x, y) {
+                ctx.beginPath();
+                ctx.moveTo(x + 50, y + 25)
+                ctx.lineTo(x + 65, y + 25)
+                ctx.lineTo(x + 57, y + 10)
+                ctx.fill();
+                ctx.closePath();
+                //Retângulos do arpão
+                ctx.beginPath();
+                ctx.fillStyle = 'grey'
+                ctx.fillRect(x + 53, y + 45, 10, 20)
+                ctx.fillStyle = 'red'
+                ctx.fillRect(x + 55, y + 35, 5, 10)
+                ctx.fillStyle = 'black'
+                ctx.fillRect(x + 55, y + 25, 5, 10)
+                ctx.stroke();
+                ctx.fill();
+            }
+        }
         let level = 1
         let harpoon1 = new Harpoon
+
+
+        //let harpoon2 = new Harpoon2
         let player1 = new Player1
+        //let player2 = new Player2
         let lastSpawningBall = true;
         let ball = new Array();
         let ballColors = ['rgb(124, 75, 43)', 'rgb(181, 110, 64)', 'rgb(58, 146, 128)', 'rgb(145, 124, 111)', 'rgb(119, 226, 47)']
-        let col = false
+        let harpoon2
+        let player2
+
+        //em caso de multiplayer
+        if (confirm('Multiplayer?')) {
+            player2 = new Player2
+            harpoon2 = new Harpoon2
+            player1.lives = 6
+
+        }
         let createNewBall = [0, 0, 0]
         function newBall() {
             // console.log(ballColors)
-            let r = Math.random() * (90 - 80) + 80
+            let r = Math.random() * (100 - 100) + 100
             //ball.push(new Ball(Math.random() * W, 0, Math.random() * 40, 'rgba(0,0,0,0.9)', Math.random() * 4, Math.random() * 2 * Math.PI))
             if (lastSpawningBall) {
                 ball.push(new Ball(W / 50 + 100, H / 30 + 100, r, ballColors[Math.floor(Math.random() * ballColors.length)], Math.random() * (6 - 2) + 2, Math.random() * (10 - 0) * Math.PI / 180))
@@ -330,29 +567,67 @@
         }
 
         //Criação da personagem
+
+
+
+
         let personagem = new Image();
         personagem.src = "images/SpriteTestImage.png"
         let moveRight = false
         let moveLeft = false;
+        let secMoveRight = false
+        let secMoveLeft = false
         let jump = false
+        let secJump = false
         let characterCounter1 = 0;
+        let lastmovement=false
+        let lastmovement2=false
         //Controlador de comandos de movimento
         function arrowPressed(e) {
             if (e.key == "ArrowRight") {
                 moveRight = true;
+                moveLeft = false
                 jump = false;
+                lastmovement=false
                 //console.log("clicou")
             }
             if (e.key == "ArrowLeft") {
                 moveLeft = true;
+                moveRight = false
                 jump = false;
+               lastmovement=false
                 //console.log("clicou")
             }
             if (e.keyCode == 32) {
-                if (moveLeft == false && moveRight == false) {
+
+                if (moveLeft == false && moveRight == false&&!lastmovement) {
                     jump = true
+                    lastmovement=true
+
                 }
-                console.log("Disparou")
+
+                //console.log("Disparou")
+            }
+            if (e.keyCode == 87) {
+                if (secMoveLeft == false && secMoveRight == false&&!lastmovement2) {
+
+                    secJump = true
+                    lastmovement2=true
+
+                }
+            }
+            if (e.keyCode == 68) {
+                secMoveRight = true
+                secMoveLeft = false
+                secJump = false
+                lastmovement2=false
+            }
+            if (e.keyCode == 65) {
+                //console.log("clicou")
+                secMoveLeft = true
+                secMoveRight = false
+                secJump = false
+                lastmovement2=false
             }
         }
 
@@ -368,6 +643,22 @@
             if (e.key != 32) {
                 jump = false;
                 harpoon1.ballContact(ball)
+
+            }
+            if (e.key != 87) {
+                secJump = false
+                try {
+                    harpoon2.ballContact(ball)
+                } catch (error) {
+
+                }
+
+            }
+            if (e.key != 68) {
+                secMoveRight = false
+            }
+            if (e.key != 65) {
+                secMoveLeft = false
             }
         }
 
@@ -392,7 +683,8 @@
 
         //ctx.drawImage(spriteStop, spriteStopFrames * 501, 0, 501, 526, spriteMovesX * 20 + W / 2 - 100, H / 2 + 150, 108, 108)
 
-
+        let framect = 0
+        let gameover = false
         function render() {
             //console.log("Funcao")
 
@@ -402,17 +694,35 @@
             //Controlador de personagem
             player1.draw()
             player1.update()
+            try {
+                player2.draw()
+                player2.update()
+                player2.contact(ball)
+                harpoon2.draw()
+                harpoon2.update()
+
+
+            } catch (error) {
+
+            }
+
             player1.contact(ball)
             //controlador do arpao
             harpoon1.draw()
             harpoon1.update()
+
+
+
+
+            framect++
+
 
             ctx.font = "30px Arial";
             ctx.strokeText(`Lives: ${player1.lives}`, 10, 50);
             ctx.font = "30px Arial";
             ctx.strokeText(`Points: ${player1.points}`, 10, 100);
             ctx.font = "30px Arial";
-            ctx.strokeText(`Level: ${level}`, W-W/10, 50);
+            ctx.strokeText(`Level: ${level}`, W - W / 10, 50);
             //BrickBorder
             /*ctx.drawImage(brickBorder, W / 50 ,0 ,W - W / 50, H / 30 )
             ctx.drawImage(brickBorder, W / 50 ,H - H / 30, W - W / 50 , H / 30)
@@ -428,7 +738,7 @@
             });
 
             if (createNewBall[0]) {
-                console.log(createNewBall[2])
+                // console.log(createNewBall[2])
                 ball.push(new Ball(createNewBall[1], createNewBall[2], createNewBall[0], ballColors[Math.floor(Math.random() * ballColors.length)], Math.random() * (6 - 2) + 2, Math.random() * (10 - 0) * Math.PI / 180))
                 createNewBall[0] = 0
             }
@@ -440,6 +750,12 @@
                 level++
 
             }
+            if (player1.lives < 0 && !gameover) {
+                alert(`Game Over! ${player1.points} points`)
+                gameover = true
+                window.location.reload(true)
+            }
+
             window.requestAnimationFrame(render)
         }
     </script>

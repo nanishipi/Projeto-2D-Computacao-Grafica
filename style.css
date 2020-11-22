@@ -1,0 +1,279 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+body{
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgb(34,193,195);
+    background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%);
+    overflow: hidden;
+    z-index: -10;
+}
+
+#logo{
+    left: 50%;
+    position: absolute;
+    padding-top: 18%;
+    transform: translate(-50%);
+    
+}
+#strokeLogo{
+    left: 50%;
+    position: absolute;
+    padding-top: 5%;
+    transform: translate(-50%);
+    z-index: -1;
+}
+#logo path{
+
+}
+#logo path:nth-child(1){
+  stroke-dasharray: 359.97760009765625;
+  stroke-dashoffset: 359.97760009765625;
+  animation: outline 4s ease forwards;
+}
+#logo path:nth-child(2){
+  stroke-dasharray: 400.53997802734375;
+  stroke-dashoffset: 400.53997802734375;
+  animation: outline 4s ease forwards 0.2s;
+}
+#logo path:nth-child(3){
+  stroke-dasharray: 498.0155944824219;
+  stroke-dashoffset: 498.0155944824219;
+  animation: outline 4s ease forwards 0.8s;
+}
+#logo path:nth-child(4){
+  stroke-dasharray: 480.0498352050781;
+  stroke-dashoffset: 480.0498352050781;
+  animation: outline 4s ease forwards 1s;
+}
+#logo path:nth-child(5){
+  stroke-dasharray: 480.0498352050781;
+  stroke-dashoffset: 480.0498352050781;
+  animation: outline 4s ease forwards 1.5s;
+}
+#logo path:nth-child(6){
+  stroke-dasharray: 480.0498352050781;
+  stroke-dashoffset: 480.0498352050781;
+  animation: outline 4s ease forwards 2s;
+}
+#logo path:nth-child(7){
+  stroke-dasharray: 480.0498352050781;
+  stroke-dashoffset: 480.0498352050781;
+  animation: outline 4s ease forwards 2.5s;
+}
+#logo path:nth-child(8){
+  stroke-dasharray: 480.0498352050781;
+  stroke-dashoffset: 480.0498352050781;
+  animation: outline 4s ease forwards 3s;
+}
+
+
+
+#strokeAnime{
+padding-top: 25%;
+margin-left: 50%;
+transform: translate(-50%, -50%);
+stroke-width: 5px;
+stroke: white;
+stroke-dashoffset: 2000;
+stroke-dasharray: 2000;
+animation: lineMountain 4s linear forwards;
+z-index: -3;
+}
+#musicControls button{
+  text-align: center;
+  display:table-cell;
+  vertical-align:middle;
+  width: 100%;
+  height: 30px;
+  left: 50%;
+  font-family: 'Varela Round', sans-serif;
+  font-weight: bold;
+  font-size: 17px;
+  border-radius: 9px;
+  border: 2px solid white;
+  background-color: orange;
+  color: white;
+  letter-spacing: 2px;
+}
+#musicControls button:hover{
+  background: #ff003b;
+  transition: all .35s;
+  border-radius: 9px;
+  content: "";
+  top: 0;
+  left: 0;
+}
+#MountainPath{
+  z-index: -10;
+  stroke: white;
+}
+#svgClouds {
+   /* animation: leftToRight 20s infinite;*/
+ }
+ #btnGroup{
+     left: 50%;
+     top: 75%;
+     position: absolute;
+     transform: translate(-50%, -50%);
+ }
+ .wrapper{
+    padding-top: 10px;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: buttons 9s ease;
+  }
+  
+  a{
+    display: block;
+    width: 300px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 18px;
+    font-family: 'Ubuntu', sans-serif;
+    text-decoration: none;
+    color: white;
+    border: 2px solid white;
+    border-radius: 9px;
+    letter-spacing: 2px;
+    text-align: center;
+    position: relative;
+    transition: all .35s;
+    background-color: orange;
+  }
+  
+  a span{
+    position: relative;
+    z-index: 2;
+  }
+  
+  a:after{
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: #ff003b;
+    transition: all .35s;
+    border-radius: 9px;
+  }
+  
+  a:hover{
+    color: #fff;
+  }
+  
+  a:hover:after{
+    width: 100%;
+  }
+  #cloud1, #cloud3, #cloud5, #cloud7{
+      z-index: -1;
+      width: 150px;
+      fill: white;
+  }
+  #cloud2, #cloud4, #cloud6, #cloud8{
+    z-index: -1;
+    width: 100px;
+    fill: white;
+  }
+  #cloud1{
+    animation: cloud1 20s linear forwards infinite;
+    left: 90%;
+    top: 25%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+
+  }
+  #cloud2{
+    animation: cloud1 25s linear forwards infinite;
+    left: 70%;
+    top: 30%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+  }
+  #cloud3{
+    animation: cloud1 30s linear forwards infinite;
+    left: 50%;
+    top: 20%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+  }
+  #cloud4{
+    animation: cloud1 35s linear forwards infinite;
+    left: 30%;
+    top: 45%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+  }
+  #cloud5{
+    animation: cloud1 40s linear forwards infinite;
+    left: 10%;
+    top: 35%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+  }
+  #cloud6{
+    animation: cloud1 35s linear forwards infinite;
+    left: 10%;
+    top: 15%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+  }
+  #cloud7{
+    animation: cloud1 30s linear forwards infinite;
+    left: 27%;
+    top: 17%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+  }
+  #cloud8{
+    animation: cloud1 25s linear forwards infinite;
+    left: 80%;
+    top: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+  }
+ @keyframes cloud1 {
+    0%{
+      margin-left: -100%;
+    }
+    100%{
+      margin-left: 100%;
+    }
+ }
+@keyframes outline{
+  from{
+    stroke: transparent;
+    fill: transparent;
+  }  
+  to{
+      stroke-dashoffset: 0;
+      stroke: white;
+      fill: #B4045F;
+    }
+  }
+  @keyframes lineMountain{ 
+    to{
+        stroke-dashoffset: 0;
+        stroke: #B4045F;
+      }
+  }
+  @keyframes dash {
+    to {
+        fill: orange;
+      stroke-dashoffset: 5;
+    }
+  }
+  @keyframes buttons{
+    from{
+      opacity: 0;
+    }
+    to{
+      opacity: 1;
+    }
+  }
+

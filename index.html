@@ -8,8 +8,7 @@
 </head>
 
 <body>
-
-    <canvas id="myCanvas" style="width: 100%;">
+    <canvas id="myCanvas" style="width: 100%;" height="100vh">
         Your browser does not support HTML5 Canvas.
     </canvas>
 
@@ -542,7 +541,7 @@
         let player2
 
         //em caso de multiplayer
-        if (confirm('Multiplayer?')) {
+        if (sessionStorage.getItem("player") == "twoplayers") {
             player2 = new Player2
             harpoon2 = new Harpoon2
             player1.lives = 6
@@ -718,11 +717,12 @@
 
 
             ctx.font = "30px Arial";
-            ctx.strokeText(`Lives: ${player1.lives}`, 10, 50);
+            ctx.strokeText(`Lives: ${player1.lives}`, 10, 90);
             ctx.font = "30px Arial";
-            ctx.strokeText(`Points: ${player1.points}`, 10, 100);
+            ctx.strokeText(`Points: ${player1.points}`, 10, 130);
             ctx.font = "30px Arial";
             ctx.strokeText(`Level: ${level}`, W - W / 10, 50);
+            ctx.strokeText("Press ESC to go back to menu", 10, 50)
             //BrickBorder
             /*ctx.drawImage(brickBorder, W / 50 ,0 ,W - W / 50, H / 30 )
             ctx.drawImage(brickBorder, W / 50 ,H - H / 30, W - W / 50 , H / 30)
@@ -758,6 +758,14 @@
 
             window.requestAnimationFrame(render)
         }
+        window.onkeyup = function(e) {
+            var event = e.which || e.keyCode || 0; 
+            if (event == 27) { // ESC Key
+                if(confirm("Tem a certeza de pretende sair?")){
+                    window.location.href = 'Home.html'; 
+                }   
+            }
+}
     </script>
 </body>
 

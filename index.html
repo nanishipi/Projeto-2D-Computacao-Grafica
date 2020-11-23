@@ -5,6 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projeto 1 - Jogo</title>
+    <style>
+        body{
+            overflow: hidden;
+        }
+    </style>
 </head>
 
 <body>
@@ -137,7 +142,7 @@
 
             update() {
 
-                if (spriteXValue >= W - 100) {
+                if (spriteXValue >= W - 130) {
                     ctx.drawImage(spriteStop, spriteStopFrames * 501, 0, 501, 526, spriteMovesX * 30 + W / 2 - 100, H / 2 + 150, 108, 108)
                 } else {
                     if (this.contadorFramesMove == 10) {
@@ -161,7 +166,7 @@
                     }
 
                 }
-                if (spriteXValue <= 0) {
+                if (spriteXValue <= 10) {
                     ctx.drawImage(spriteStop, spriteStopFrames * 501, 0, 501, 526, spriteMovesX * 30 + W / 2 - 100, H / 2 + 150, 108, 108)
                 } else {
                     if (this.contadorFramesMove == 2) {
@@ -254,7 +259,7 @@
 
             }
             update() {
-                if (this.spriteXValue >= W - 100) {
+                if (this.spriteXValue >= W - 160) {
                     ctx.drawImage(spriteSecStop, this.spriteStopFrames * 501, 0, 501, 526, spritesecMovesX * 30 + W / 2 - 79, H / 2 + 150, 108, 108)
                 } else {
                     if (this.contadorFramesMove == 10) {
@@ -278,7 +283,7 @@
                     }
 
                 }
-                if (this.spriteXValue <= 0) {
+                if (this.spriteXValue <= 10) {
                     ctx.drawImage(spriteSecStop, this.spriteStopFrames * 501, 0, 501, 526, spritesecMovesX * 30 + W / 2 - 79, H / 2 + 150, 108, 108)
                 } else {
                     if (this.contadorFramesMove == 2) {
@@ -717,17 +722,17 @@
 
 
             ctx.font = "30px Arial";
-            ctx.strokeText(`Lives: ${player1.lives}`, 10, 90);
+            ctx.strokeText(`Lives: ${player1.lives}`, 40, 90);
             ctx.font = "30px Arial";
-            ctx.strokeText(`Points: ${player1.points}`, 10, 130);
+            ctx.strokeText(`Points: ${player1.points}`, 40, 130);
             ctx.font = "30px Arial";
             ctx.strokeText(`Level: ${level}`, W - W / 10, 50);
-            ctx.strokeText("Press ESC to go back to menu", 10, 50)
+            ctx.strokeText("Press ESC to go back to menu", 40, 50)
             //BrickBorder
-            /*ctx.drawImage(brickBorder, W / 50 ,0 ,W - W / 50, H / 30 )
+            ctx.drawImage(brickBorder, W / 50 ,0 ,W - W / 50, H / 30 )
             ctx.drawImage(brickBorder, W / 50 ,H - H / 30, W - W / 50 , H / 30)
             ctx.drawImage(brickBorder, 0 , 0, W / 50, H)
-            ctx.drawImage(brickBorder, W - W / 50 , 0, W / 50, H)*/
+            ctx.drawImage(brickBorder, W - W / 50 , 0, W / 50, H)
 
             ball.forEach(function (ball, index) {
                 ball.draw()

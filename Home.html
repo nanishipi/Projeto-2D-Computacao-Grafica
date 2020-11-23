@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    <audio id="myAudio" autoplay="true">
+    <audio id="myAudio" autoplay="true" loop="infinite">
         <source src="./BackgroundMusic/Musicadebackground.mp3" type="audio/ogg">
     </audio>
     <div id="container">
@@ -38,10 +38,10 @@
                 </svg>
             <div id="btnGroup">
                 <div class="wrapper">
-                    <a onmouseover="hoverSoud.play()" href="#"><span>1 Jogador</span></a>
+                    <a onmousedown="hoverSoud.play()" onclick="onePlayer()" href="index.html"><span>1 Jogador</span></a>
                 </div>
                 <div class="wrapper">
-                    <a onmouseover="hoverSoud.play()" href="#"><span>2 Jogadores</span></a>
+                    <a onmousedown="hoverSoud.play()" onclick="twoPlayer()" href="index.html"><span>2 Jogadores</span></a>
                 </div>
                 <div class="wrapper">
                     <div id="musicControls">
@@ -102,6 +102,7 @@
     </div>
     <script src="app.js"></script>
     <script src="soundControl.js"></script>
+    <script src="players.js"></script>
 </body>
 
 </html>
